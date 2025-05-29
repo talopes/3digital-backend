@@ -2,10 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB conectado com sucesso'))
@@ -13,12 +17,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 const PedidoSchema = new mongoose.Schema({
   produto: String,
-  quantidades: {
-    P: Number,
-    M: Number,
-    G: Number,
-    GG: Number,
-  },
+  quantidades: { P: Number, M: Number, G: Number, GG: Number },
   temArte: String,
   descricaoArte: String,
   nome: String,
@@ -28,6 +27,10 @@ const PedidoSchema = new mongoose.Schema({
 });
 
 const Pedido = mongoose.model('Pedido', PedidoSchema);
+
+app.get('/', (req, res) => {
+  res.render('index');
+});
 
 app.post('/api/pedido', async (req, res) => {
   try {
