@@ -49,3 +49,6 @@ app.post('/pedido', upload.single('arquivo'), (req, res) => {
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+
+// Confirmação de rota ativa
+console.log("Deploy atualizado em", new Date().toISOString());
