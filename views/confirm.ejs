@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pedido Recebido</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Pedido Recebido!</h1>
+        <p><strong>Produto:</strong> <%= dados.produto %></p>
+        <p><strong>Tamanho:</strong> <%= dados.tamanho || '---' %></p>
+        <p><strong>Quantidade:</strong> <%= dados.quantidade %></p>
+        <p><strong>Cliente:</strong> <%= dados.nome %> - <%= dados.telefone %></p>
+        <p><strong>Endereço:</strong> <%= dados.endereco %></p>
+        <% if (dados.tem_arte === 'sim') { %>
+            <p><strong>Arquivo Enviado:</strong> <%= dados.arquivo %></p>
+        <% } else { %>
+            <p><strong>Descrição da Arte:</strong> <%= dados.ideia %></p>
+        <% } %>
+    </div>
+</body>
+</html>

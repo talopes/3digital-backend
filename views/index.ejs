@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3digital - Estampou, chegou!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+ <style>
+  body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #f4f4f4;
+    color: #111;
+  }
+
+  header {
+    background: linear-gradient(135deg, #FF5A00, #00D1B2);
+    color: white;
+    padding: 5rem 2rem;
+    text-align: center;
+    position: relative;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 1;
+  }
+
+  header * {
+    position: relative;
+    z-index: 2;
+  }
+
+  h1 {
+    font-size: 3.2rem;
+    margin: 0;
+    font-weight: 700;
+  }
+
+  .slogan {
+    font-size: 1.8rem;
+    font-weight: 500;
+    margin-top: 1.2rem;
+  }
+
+  .btn-principal {
+    display: inline-block;
+    background: #FF5A00;
+    color: white;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 2rem;
+    border: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .btn-principal:hover {
+    background: #cc4a00;
+  }
+
+  .vantagens {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+    background: #fff;
+    text-align: center;
+  }
+
+  .vantagem {
+    flex: 1 1 250px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    max-width: 300px;
+  }
+
+  .vantagem h3 {
+    color: #FF5A00;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+  }
+
+  .vantagem p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+  }
+
+  .vantagem i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #FF0055;
+  }
+
+  .formulario {
+    max-width: 850px;
+    margin: 4rem auto;
+    background: white;
+    padding: 3rem;
+    border-radius: 24px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    display: none;
+    font-size: 1.1rem;
+  }
+
+  .progress-bar {
+    display: flex;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .progress-bar div {
+    flex: 1;
+    padding: 1rem 0;
+    text-align: center;
+    background: #eaeaea;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #666;
+    transition: all 0.3s;
+  }
+
+  .progress-bar div.active {
+    background: linear-gradient(90deg, #FF5A00, #00D1B2);
+    color: #fff;
+  }
+
+  .step {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .step.active {
+    display: block;
+  }
+
+  .formulario input,
+  .formulario select,
+  .formulario textarea {
+    width: 100%;
+    padding: 1.2rem 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: border 0.2s ease-in-out;
+  }
+
+  .formulario input:focus,
+  .formulario select:focus,
+  .formulario textarea:focus {
+    border-color: #00D1B2;
+    outline: none;
+  }
+
+  .formulario label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .formulario button {
+    width: 100%;
+    padding: 1.3rem;
+    background: #FF0055;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .formulario button:hover {
+    background: #e6004f;
+  }
+
+  .botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (min-width: 600px) {
+    .botoes {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+
+  .feedback {
+    max-width: 500px;
+    margin: 2rem auto;
+    background: #00D1B2;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    font-size: 1.2rem;
+    display: none;
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .estatistica {
+    text-align: center;
+    background: linear-gradient(90deg, #00D1B2, #00B09E);
+    color: white;
+    padding: 3rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .estatistica .contador {
+    font-size: 1.5rem;
+    animation: fadeInUp 1s ease-in-out both;
+  }
+
+  .estatistica i {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2.2rem; }
+    .slogan { font-size: 1.2rem; }
+    .btn-principal { font-size: 1rem; padding: 0.8rem 1.5rem; }
+    .formulario { margin: 2rem 1rem; padding: 2rem; }
+    .vantagem { max-width: 100%; }
+    .progress-bar div { font-size: 0.9rem; }
+    .formulario input, .formulario select, .formulario textarea { font-size: 1rem; }
+    .feedback { padding: 1.5rem; font-size: 1rem; }
+  }
+</style>
+
+</head>
+<body>
+  <header>
+    <h1>3Digital</h1>
+    <div class="slogan">Estampou, chegou. Sua arte pronta, sua camiseta também.</div>
+    <button class="btn-principal" onclick="abrirFormulario()">Fazer Orçamento</button>
+  </header>
+
+  <section class="vantagens">
+    <div class="vantagem"><i class="bi bi-stars"></i><h3>Arte Grátis</h3><p>Descreveu? A gente cria a arte pra você, sem custo adicional.</p></div>
+    <div class="vantagem"><i class="bi bi-stopwatch"></i><h3>Entrega Rápida</h3><p>Camisetas personalizadas entregues em até 3 horas na sua região.</p></div>
+    <div class="vantagem"><i class="bi bi-cash-coin"></i><h3>Preço Justo</h3><p>Alta qualidade, personalização e agilidade com o melhor preço do mercado.</p></div>
+  </section>
+
+  <form class="formulario" onsubmit="mostrarFeedback(event)">
+    <div class="progress-bar"><div class="active">Produto</div><div>Arte</div><div>Contato</div></div>
+
+    <div class="step active">
+      <label for="produto">Qual produto deseja?</label>
+      <select id="produto" required>
+        <option value="">Selecione...</option>
+        <option value="camiseta">Camiseta</option>
+        <option value="faixa">Faixa</option>
+        <option value="folder">Folder</option>
+        <option value="toldo">Toldo</option>
+      </select>
+      <div id="quantidades" style="display: none;">
+        <label>Quantidade por tamanho:</label>
+        <input type="number" placeholder="Quantidade P" min="0">
+        <input type="number" placeholder="Quantidade M" min="0">
+        <input type="number" placeholder="Quantidade G" min="0">
+        <input type="number" placeholder="Quantidade GG" min="0">
+      </div>
+      <div class="botoes">
+        <button type="button" onclick="proximoStep()">Próximo</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <label>Você tem a arte?</label>
+      <select id="tem_arte" required onchange="document.getElementById('descricao_arte').style.display = this.value === 'nao' ? 'block' : 'none'">
+        <option value="">Selecione...</option>
+        <option value="sim">Sim</option>
+        <option value="nao">Não</option>
+      </select>
+      <textarea id="descricao_arte" placeholder="Descreva sua ideia se não tiver arte..." style="display:none;"></textarea>
+      <div class="botoes">
+        <button type="button" onclick="mostrarStep(currentStep - 1)">Voltar</button>
+        <button type="button" onclick="proximoStep()">Próximo</button>
+      </div>
+    </div>
+
+    <div class="step">
+     <input type="text" name="nome" placeholder="Seu nome" required>
+     <input type="email" name="email" placeholder="Seu e-mail">
+     <input type="tel" name="whatsapp" placeholder="Seu WhatsApp (somente números com DDD)" 
+       pattern="\d{10,11}" maxlength="11" required 
+       title="Digite o número com DDD, sem espaços ou traços. Ex: 11999998888">
+
+      <div class="botoes">
+        <button type="button" onclick="mostrarStep(currentStep - 1)">Voltar</button>
+        <button type="submit">Enviar</button>
+      </div>
+    </div>
+  </form>
+
+  <section class="estatistica">
+    <div class="contador">
+      <i class="bi bi-graph-up-arrow"></i>
+      <h2><span id="contadorArtes">3256</span> artes entregues em até 3h</h2>
+    </div>
+  </section>
+
+  <div class="feedback">
+    <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
+    <p><strong>Recebemos seu pedido!</strong></p>
+    <p>Em instantes vamos te chamar no WhatsApp 🚀</p>
+  </div>
+
+  <script>
+    let currentStep = 0;
+    function mostrarStep(step) {
+      const steps = document.querySelectorAll('.step');
+      const indicators = document.querySelectorAll('.progress-bar div');
+      steps.forEach((s, i) => {
+        s.classList.toggle('active', i === step);
+        indicators[i].classList.toggle('active', i === step);
+      });
+      currentStep = step;
+    }
+    function proximoStep() {
+      if (currentStep < 2) mostrarStep(currentStep + 1);
+    }
+    function abrirFormulario() {
+      document.querySelector('.formulario').style.display = 'block';
+      document.querySelector('.formulario').scrollIntoView({ behavior: 'smooth' });
+      mostrarStep(0);
+    }
+    function mostrarFeedback(e) {
+      e.preventDefault();
+      document.querySelector('.formulario').style.display = 'none';
+      document.querySelector('.feedback').style.display = 'block';
+      document.querySelector('.feedback').scrollIntoView({ behavior: 'smooth' });
+    }
+    document.getElementById('produto').addEventListener('change', function() {
+      const q = document.getElementById('quantidades');
+      q.style.display = this.value === 'camiseta' ? 'block' : 'none';
+    });
+    let contador = document.getElementById("contadorArtes");
+let total = 2459;
+let atual = 0;
+function animarContador() {
+  const step = Math.ceil(total / 60);
+  const interval = setInterval(() => {
+    atual += step;
+    if (atual >= total) {
+      atual = total;
+      clearInterval(interval);
+    }
+    contador.innerText = atual.toLocaleString('pt-BR');
+  }, 30);
+}
+window.addEventListener('load', animarContador);
+</script>
+
+</body>
+</html>
