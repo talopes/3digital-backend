@@ -1,24 +1,24 @@
+// app.js - Servidor Express com upload de arquivos via AJAX
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const multer = require('multer');
-const bodyParser = require('body-parser');
 const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Conexão com MongoDB Atlas
+// Conexão com MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
-  console.log('MongoDB conectado com sucesso');
+  console.log('✅ MongoDB conectado com sucesso');
 }).catch((err) => {
-  console.error('Erro ao conectar no MongoDB:', err);
+  console.error('❌ Erro ao conectar no MongoDB:', err);
 });
 
-// Definindo schema
+// Schema do pedido
 const pedidoSchema = new mongoose.Schema({
   produto: String,
   quantidadeP: Number,
@@ -33,15 +33,17 @@ const pedidoSchema = new mongoose.Schema({
   arquivo: String,
   data: { type: Date, default: Date.now }
 });
+
 const Pedido = mongoose.model('Pedido', pedidoSchema);
 
-// Configurações Express
-app.use(bodyParser.urlencoded({ extended: true }));
+// Middlewares
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Upload de arquivos
+// Configuração de upload com multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'public/uploads');
@@ -57,7 +59,7 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-// Rota de envio do formulário
+// Rota de envio de formulário (responde para AJAX)
 app.post('/pedido', upload.single('arquivo'), async (req, res) => {
   try {
     const pedido = new Pedido({
@@ -75,14 +77,14 @@ app.post('/pedido', upload.single('arquivo'), async (req, res) => {
     });
 
     await pedido.save();
-    res.redirect('/');
+    res.status(200).json({ message: 'Pedido salvo com sucesso!' });
   } catch (err) {
-    console.error('Erro ao salvar pedido:', err);
-    res.status(500).send('Erro ao processar seu pedido.');
+    console.error('❌ Erro ao salvar pedido:', err);
+    res.status(500).json({ error: 'Erro ao processar seu pedido.' });
   }
 });
 
-// Iniciar servidor
+// Inicialização do servidor
 app.listen(PORT, () => {
-  console.log(`Servidor rodando em http://localhost:${PORT}`);
+  console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
 });

@@ -3,12 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3digital - Estampou, chegou!</title>
+  <title>3Digital - Estampou, Chegou!</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <style>
-    /* (CSS original mantido aqui, sem alterações para brevidade) */
-  </style>
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
   <header>
@@ -19,12 +17,16 @@
 
   <section class="vantagens">
     <div class="vantagem"><i class="bi bi-stars"></i><h3>Arte Grátis</h3><p>Descreveu? A gente cria a arte pra você, sem custo adicional.</p></div>
-    <div class="vantagem"><i class="bi bi-stopwatch"></i><h3>Entrega Rápida</h3><p>Camisetas personalizadas entregues em até 3 horas na sua região.</p></div>
-    <div class="vantagem"><i class="bi bi-cash-coin"></i><h3>Preço Justo</h3><p>Alta qualidade, personalização e agilidade com o melhor preço do mercado.</p></div>
+    <div class="vantagem"><i class="bi bi-stopwatch"></i><h3>Entrega Rápida</h3><p>Camisetas entregues em até 3 horas na sua região.</p></div>
+    <div class="vantagem"><i class="bi bi-cash-coin"></i><h3>Preço Justo</h3><p>Alta qualidade com o melhor preço do mercado.</p></div>
   </section>
 
-  <form class="formulario" action="/pedido" method="POST" enctype="multipart/form-data" onsubmit="mostrarFeedback(event)">
-    <div class="progress-bar"><div class="active">Produto</div><div>Arte</div><div>Contato</div></div>
+  <form id="pedidoForm" class="formulario" enctype="multipart/form-data">
+    <div class="progress-bar">
+      <div class="active">Produto</div>
+      <div>Arte</div>
+      <div>Contato</div>
+    </div>
 
     <div class="step active">
       <label for="produto">Qual produto deseja?</label>
@@ -65,7 +67,7 @@
       <input type="text" name="nome" placeholder="Seu nome" required>
       <input type="email" name="email" placeholder="Seu e-mail" required>
       <input type="tel" name="whatsapp" placeholder="Seu WhatsApp (somente números com DDD)" 
-        pattern="\d{10,11}" maxlength="11" required 
+        pattern="\d{10,11}" maxlength="11" required
         title="Digite o número com DDD, sem espaços ou traços. Ex: 11999998888">
       <div class="botoes">
         <button type="button" onclick="mostrarStep(currentStep - 1)">Voltar</button>
@@ -74,17 +76,9 @@
     </div>
   </form>
 
-  <section class="estatistica">
-    <div class="contador">
-      <i class="bi bi-graph-up-arrow"></i>
-      <h2><span id="contadorArtes">3256</span> artes entregues em até 3h</h2>
-    </div>
-  </section>
-
-  <div class="feedback">
+  <div class="feedback" style="display:none;">
     <i class="bi bi-check-circle" style="font-size: 2rem;"></i>
-    <p><strong>Recebemos seu pedido!</strong></p>
-    <p>Em instantes vamos te chamar no WhatsApp 🚀</p>
+    <p class="mensagem-feedback"><strong>Recebemos seu pedido!</strong></p>
   </div>
 
   <script>
@@ -106,34 +100,40 @@
       document.querySelector('.formulario').scrollIntoView({ behavior: 'smooth' });
       mostrarStep(0);
     }
-    function mostrarFeedback(e) {
-      // Se estiver validando com JS, pode manter. Se o backend trata, remova.
-      // e.preventDefault(); // deixe comentado se for salvar no banco
-      document.querySelector('.formulario').style.display = 'none';
-      document.querySelector('.feedback').style.display = 'block';
-      document.querySelector('.feedback').scrollIntoView({ behavior: 'smooth' });
-    }
 
     document.getElementById('produto').addEventListener('change', function () {
       const q = document.getElementById('quantidades');
       q.style.display = this.value === 'camiseta' ? 'block' : 'none';
     });
 
-    let contador = document.getElementById("contadorArtes");
-    let total = 2459;
-    let atual = 0;
-    function animarContador() {
-      const step = Math.ceil(total / 60);
-      const interval = setInterval(() => {
-        atual += step;
-        if (atual >= total) {
-          atual = total;
-          clearInterval(interval);
+    document.getElementById('pedidoForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const feedbackDiv = document.querySelector('.feedback');
+      const mensagem = feedbackDiv.querySelector('.mensagem-feedback');
+
+      try {
+        const response = await fetch('/pedido', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+
+        if (response.ok && result.message) {
+          form.style.display = 'none';
+          mensagem.innerText = result.message;
+          feedbackDiv.style.display = 'block';
+          feedbackDiv.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          mensagem.innerText = result.error || 'Erro ao enviar o pedido.';
+          feedbackDiv.style.display = 'block';
         }
-        contador.innerText = atual.toLocaleString('pt-BR');
-      }, 30);
-    }
-    window.addEventListener('load', animarContador);
+      } catch (error) {
+        mensagem.innerText = 'Erro na conexão. Verifique sua internet e tente novamente.';
+        feedbackDiv.style.display = 'block';
+      }
+    });
   </script>
 </body>
 </html>
